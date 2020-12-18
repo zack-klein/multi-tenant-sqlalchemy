@@ -1,0 +1,35 @@
+{% extends "appbuilder/base.html" %}
+{% block content %}
+
+<div class="row">
+  <div class="col">
+    <h1>Posts</h1>
+    <p>
+      Posts here are filtered based on this {{ current_user.username }}'s
+      <i>current_tenant_id</i>. How cool is that?!
+    </p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-8">
+    <table class="table">
+      <thead>
+        <th>Post</th>
+        <th>Author</th>
+        <th>Tenant</th>
+      </thead>
+      <tbody>
+        {% for post in posts  %}
+          <tr>
+            <td><a href="{{ url_for('.post', post_id=post.id) }}">{{ post.name }}</a></td>
+            <td>{{ post.author.fullname() }}</td>
+            <td>{{ post.tenant.name }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}
