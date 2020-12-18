@@ -8,4 +8,4 @@ Coincidentally, I also recently read [this wonderful book on SQLAlchemy](https:/
 
 # How does it work?
 
-There are actually a couple ways to do this. I chose to use listeners here.
+
