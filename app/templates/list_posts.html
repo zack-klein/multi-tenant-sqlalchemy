@@ -1,12 +1,15 @@
-{% extends "appbuilder/base.html" %}
+{% extends "mt_base.html" %}
+
 {% block content %}
 
 <div class="row">
   <div class="col">
     <h1>Posts</h1>
     <p>
-      Posts here are filtered based on this {{ current_user.username }}'s
-      <i>current_tenant_id</i>. How cool is that?!
+      Posts here are filtered based on the tenants that
+      {{ current_user.first_name.title() }} 
+      {{ current_user.last_name.title() }} is part of.
+      How cool is that?!
     </p>
   </div>
 </div>
@@ -23,7 +26,7 @@
         {% for post in posts  %}
           <tr>
             <td><a href="{{ url_for('.post', post_id=post.id) }}">{{ post.name }}</a></td>
-            <td>{{ post.author.fullname() }}</td>
+            <td>{{ post.author.username }}</td>
             <td>{{ post.tenant.name }}</td>
           </tr>
         {% endfor %}

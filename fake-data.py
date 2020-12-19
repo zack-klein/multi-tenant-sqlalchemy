@@ -1,7 +1,7 @@
 from faker import Faker
 
 from flask import current_app
-from flask_appbuilder.security.sqla.models import Role
+from flask_appbuilder.security.sqla.models import Role, User
 
 from random import choice, randint
 from tqdm import tqdm
@@ -10,12 +10,11 @@ from werkzeug.security import generate_password_hash
 
 from app import app
 from app.database import db
-from app.sec_models import TenantUser, Tenant
-from app.models import Post
+from app.models import Post, Tenant
 
 
 def add_user(username, firstname, lastname, email, role, password, tenant_id):
-    user = TenantUser()
+    user = User()
     user.first_name = firstname
     user.last_name = lastname
     user.password = generate_password_hash(password)

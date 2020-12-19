@@ -3,7 +3,51 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declared_attr
 
 from app.database import db
-from app.mixins import TenantMixin
+
+
+class TenantMixin(object):
+    """
+    Mixin that ties a model to a tenant.
+    """
+
+    # Override to allow cross tenant access on an object.
+    cross_tenant = False
+
+    @declared_attr
+    def tenant_id(cls):
+        return Column(Integer, ForeignKey("tenant.id"), nullable=False,)
+
+    @declared_attr
+    def tenant(cls):
+        return relationship(
+            "Tenant",
+            primaryjoin="%s.tenant_id == Tenant.id" % cls.__name__,
+            enable_typechecks=False,
+        )
+
+
+users_tenants = db.Table(
+    "users_tenants",
+    db.Model.metadata,
+    db.Column("id", db.Integer, primary_key=True),
+    db.Column("user_id", db.Integer, db.ForeignKey("ab_user.id")),
+    db.Column("tenant_id", db.Integer, db.ForeignKey("tenant.id")),
+)
+
+
+class Tenant(db.Model):
+    __tablename__ = "tenant"
+    id = Column(Integer, primary_key=True)
+    name = Column(String(50), unique=True, nullable=False)
+    users = relationship(
+        "User",
+        secondary=users_tenants,
+        backref="users",
+        doc="The users for a tenant.",
+    )
+
+    def __repr__(self):
+        return self.name
 
 
 class Post(db.Model, TenantMixin):
@@ -18,8 +62,8 @@ class Post(db.Model, TenantMixin):
     @declared_attr
     def author(cls):
         return relationship(
-            "TenantUser",
-            primaryjoin="%s.author_id == TenantUser.id" % cls.__name__,
+            "User",
+            primaryjoin="%s.author_id == User.id" % cls.__name__,
             enable_typechecks=False,
         )
 

@@ -1,10 +1,12 @@
-{% extends "appbuilder/base.html" %}
+{% extends "mt_base.html" %}
+
+
 {% block content %}
 
 <div class="row">
   <div class="col">
     <h1>{{ post.name }}</h1>
-    <p class="primary">{{ post.author.fullname() }}</p>
+    <p class="primary">{{ post.author.username }}</p>
   </div>
 </div>
 
