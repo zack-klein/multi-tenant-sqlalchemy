@@ -5,6 +5,14 @@
 
   <ul class="nav navbar-nav">
     <li><a href="{{ url_for('FilteredPostView.posts') }}">Posts</a></li>
+  </ul>
 
+
+  <ul class="nav navbar-nav navbar-right">
+  	{% if not current_user.is_authenticated and current_user.is_anonymous %}
+    	<li><a href="{{ url_for('AuthDBView.login') }}">Login</a></li>
+    {% else %}
+    	<li><a href="{{ url_for('AuthDBView.logout') }}">Logout</a></li>
+    {% endif %}
   </ul>
 </nav>

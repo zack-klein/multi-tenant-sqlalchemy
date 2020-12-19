@@ -1,5 +1,6 @@
-from flask import render_template
+from flask import render_template, redirect, url_for
 from flask_appbuilder import BaseView, expose
+from flask_login import current_user
 
 from app import appbuilder, db
 from app.models import Post
@@ -23,6 +24,9 @@ class FilteredPostView(BaseView):
 
     @expose("/posts/")
     def posts(self):
+        if not current_user.is_authenticated:
+            return redirect(url_for("AuthDBView.login"))
+
         posts = db.session.query(Post).all()
         return self.render_template("list_posts.html", posts=posts)
 
